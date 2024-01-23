@@ -9,7 +9,7 @@ const authReducer = (state, action) => {
     case 'LOGIN':
       return { ...state, isAuthenticated: true, userId: action.payload };
     case 'LOGOUT':
-      return { ...state, isAuthenticated: false, user: null };
+      return { ...state, isAuthenticated: false, userId: null };
     default:
       return state;
   }
@@ -18,7 +18,7 @@ const authReducer = (state, action) => {
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, {
     isAuthenticated: false,
-    user: null,
+    userId: null,
   });
 
   return (
