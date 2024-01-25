@@ -29,7 +29,10 @@ mongoose.connect(process.env.MONGO_DB_URL, {
 // io.attachApp(app);
 
 // Middleware Connections
-app.use(cors())
+app.use(cors({
+    credentials: true,
+    origin: 'http://localhost:5173'
+}))
 app.use(express.json())
 
 // Routes
