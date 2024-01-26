@@ -2,9 +2,13 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Quill from "quill"
 import "quill/dist/quill.snow.css"
 import {io} from "socket.io-client"
+import { useParams } from 'react-router-dom'
+import Cookie from "js-cookie"
+
 const TextEditor = () => {
   const [quill, setQuill] =useState()
   const [socket, setSocket]=useState()
+  const {documentId} = useParams()
 
   const OPTIONS =[
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -24,9 +28,19 @@ const TextEditor = () => {
     const editor = document.createElement("div")
     wrapper.append(editor)
     var qu = new Quill(editor, {theme: 'snow' ,modules:{toolbar:OPTIONS}});
+    qu.disable()
+    qu.setText("Loading.....")
     setQuill(qu)
   },[])  
 
+useEffect(()=>{
+  if (socket ==null || quill == null) return
+  socket.once("load-document", document=>{
+    quill.setContents(document)
+    quill.enable()
+  })
+  socket.emit('get-document' ,documentId)
+},[socket,quill,documentId])
 
   useEffect(()=>{
     const s = io("http://localhost:5000");
@@ -62,6 +76,20 @@ const TextEditor = () => {
   },[socket , quill])
 
 
+  useEffect(()=>{
+    if (socket ==null || quill == null) return
+    const everySecondSaved = setTimeout(()=>{
+      socket.emit('saved-document' ,quill.getContents())
+      
+    },2000)
+    return()=>{
+      clearInterval(everySecondSaved)
+    }
+  },[socket , quill])
+
+  
+
+ 
   return (
     <div className="container" ref={refwrapper}></div>
   )
