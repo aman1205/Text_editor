@@ -7,6 +7,8 @@ require('dotenv').config()
 const UserRouter = require('./routes/user')
 const Server = require("socket.io");
 const Document = require("./models/document")
+const cookieParser = require('cookie-parser');
+
 
 
 const httpServer = createServer(app);
@@ -20,13 +22,10 @@ const io = Server(httpServer, {
 // Mongo DB Connections
 mongoose.connect(process.env.MONGO_DB_URL, {
 }).then(response => {
-    console.log('MongoDB Connection Succeeded.')
+    console.log('MongoDB Connection Succeeded.',)
 }).catch(error => {
-    console.log('Error in DB connection: ' + error)
+    console.log('Error in DB connection: ' + error.message)
 });
-
-//Attached Socekt server with express
-// io.attachApp(app);
 
 // Middleware Connections
 app.use(cors({
@@ -34,6 +33,8 @@ app.use(cors({
     origin: 'http://localhost:5173'
 }))
 app.use(express.json())
+app.use(cookieParser());
+
 
 // Routes
 app.use('/user', UserRouter)
@@ -74,7 +75,6 @@ const PORT = process.env.PORT || 5000
 httpServer.listen(PORT, () => {
     console.log('App running in port: ' + PORT)
 })
-
 
 async function getDocumentOrCreate(id) {
     if (id == null) return;

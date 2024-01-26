@@ -1,18 +1,15 @@
 import { useState } from "react";
-import { useAuthDispatch } from "../Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/authActions";
 import { Link } from "react-router-dom";
 import axios from "axios";
 const Login = () => {
-  const [userId, setUserId] = useState("");
-  // const authDispatch = useAuthDispatch();
   const authDispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
-    password: " ",
+    password: "",
   });
 
   const handleChange = (e) => {
@@ -34,8 +31,6 @@ const Login = () => {
       alert("Login SuccenFul ");
     }
     apiUserId = response.data.userId;
-    // Update the user state in the context
-    // authDispatch({ type: "login", payload: apiUserId });
     authDispatch(login(apiUserId));
     // Redirect to the /documents route
     navigate("/");
