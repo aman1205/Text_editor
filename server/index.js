@@ -45,8 +45,8 @@ try {
         // ...
         console.log("Connected webSocket")
 
-        socket.on("get-document", documentId => {
-            const document = getDocumentOrCreate(documentId);
+        socket.on("get-document", async documentId => {
+            const document = await getDocumentOrCreate(documentId);
             socket.join(documentId)
             socket.emit("load-document", document.data)
 
@@ -55,7 +55,7 @@ try {
             })
 
 
-            socket.on("saved-document", async data => {
+            socket.on("save-document", async data => {
                 await Document.findByIdAndUpdate(documentId, { data })
             })
         })
@@ -65,7 +65,7 @@ try {
 
     });
 } catch (error) {
-    console.warn("Unable to connect Websocket ", error)
+    console.warn("Unable to connect Websocket ", error.message)
 }
 
 const PORT = process.env.PORT || 5000
