@@ -22,7 +22,7 @@ function App() {
   const dispatch = useDispatch();
   const [token, setToken] = useState(null);
   axios.defaults.withCredentials = true;
-  const isAuthenticated = useSelector((state) => state.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.authReducer.isAuthenticated);
 
 
   useEffect(() => {
@@ -31,14 +31,15 @@ function App() {
       setToken(savedToken);
     }
   }, [])
-  useEffect(() => {
-    const storedUserId = localStorage.getItem("userId")
-    if (storedUserId) {
-      dispatch(login(storedUserId));
-    }
-  }, [dispatch]);
 
-  console.log("token " , token)
+
+  // useEffect(() => {
+  //   const storedUserId = localStorage.getItem("userId")
+  //   if (storedUserId) {
+  //     dispatch(login(storedUserId));
+  //   }
+  // }, [dispatch]);
+
   return (
     // <AuthProvider>
     <Router>
