@@ -4,10 +4,8 @@ import "quill/dist/quill.snow.css";
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import {logout} from "../redux/authActions"
+import { logout } from "../redux/authActions";
 import axios from "axios";
-
-// import Cookie from "js-cookie"
 
 const OPTIONS = [
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -19,14 +17,14 @@ const OPTIONS = [
   [{ align: [] }],
   ["image", "blockquote", "code-block"],
   ["clean"],
-  [{placeholder: 'Compose an epic...'}],
+  [{ placeholder: "Compose an epic..." }],
 ];
 
 const TextEditor = () => {
   const [quill, setQuill] = useState();
   const [socket, setSocket] = useState();
   const { documentId } = useParams();
-  const usedispatch = useDispatch()
+  const usedispatch = useDispatch();
 
   //Connecting to Socket
   useEffect(() => {
@@ -102,22 +100,23 @@ const TextEditor = () => {
     setQuill(qu);
   }, []);
 
-  const handleLogout=async()=>{
-    const response = await axios.post("http://localhost:5000/user/logout")
-    if(response.status == 200){
-      alert("Logout Successfull")
+  const handleLogout = async () => {
+    const response = await axios.post("http://localhost:5000/user/logout");
+    if (response.status == 200) {
+      alert("Logout Successfull");
     }
-    usedispatch(logout())
-  }
+    usedispatch(logout());
+  };
 
   return (
     <>
       <div className="container" ref={refwrapper}>
-        
       </div>
       <div>
-          <button className="logout" onClick={handleLogout}>logout</button>
-        </div>
+        <button className="logout" onClick={handleLogout}>
+          logout
+        </button>
+      </div>
     </>
   );
 };

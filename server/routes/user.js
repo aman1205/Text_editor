@@ -26,6 +26,9 @@ router.get('/profile', Authorization, async (req, res) => {
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
   try {
+    if (!email || !password) {
+      return res.status(400).json({ error: "Details are missing" });
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     let user = new User({
       name,
@@ -36,12 +39,13 @@ router.post('/register', async (req, res) => {
       expiresIn: '1h',
     });
     user = await user.save()
-    const responseUserData = { UserId: user._id, token }
+    const responseUserData = { UserId: user._id,}
     res.status(201).send(responseUserData)
   } catch (error) {
     res.status(500).send(error.message)
   }
 })
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
